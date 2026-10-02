@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from accounting_intel.core import Engagement, analyse, sample, validate
+from accounting_intel.core import Engagement, analyse, manager_portfolio, sample, validate
 
 
 def test_risky_client_is_prioritised() -> None:
@@ -35,3 +35,10 @@ def test_completion_bound_fails() -> None:
     )
     with pytest.raises(ValueError, match="completion"):
         validate([bad])
+
+
+def test_manager_portfolio_reconciles_owned_engagements() -> None:
+    portfolio = manager_portfolio(sample(), date(2026, 10, 2))
+    m01 = next(row for row in portfolio if row["manager"] == "M01")
+    assert m01["hours"] == 140
+    assert m01["wip"] == 3000

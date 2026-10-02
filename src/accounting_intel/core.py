@@ -105,6 +105,35 @@ def analyse(rows: Iterable[Engagement], as_of: date) -> list[ClientSignal]:
     return output
 
 
+def manager_portfolio(
+    engagements: Iterable[Engagement],
+    as_of: date,
+) -> list[dict[str, object]]:
+    rows = list(engagements)
+    signals = analyse(rows, as_of)
+    by_key = {(row.client_id, row.service_line): row for row in signals}
+    managers = sorted({row.manager for row in rows})
+    output: list[dict[str, object]] = []
+    for manager in managers:
+        owned = [row for row in rows if row.manager == manager]
+        owned_signals = [by_key[(row.client_id, row.service_line)] for row in owned]
+        output.append(
+            {
+                "manager": manager,
+                "hours": sum(row.hours_worked for row in owned),
+                "wip": round(sum(row.wip_value for row in owned), 2),
+                "ar": round(sum(row.ar_balance for row in owned), 2),
+                "high_priority_engagements": sum(
+                    signal.priority == "high" for signal in owned_signals
+                ),
+                "contribution": round(
+                    sum(signal.contribution for signal in owned_signals), 2
+                ),
+            }
+        )
+    return output
+
+
 def portfolio_summary(signals: Iterable[ClientSignal]) -> dict[str, object]:
     rows = list(signals)
     return {
@@ -140,5 +169,6 @@ def serialise_sample(as_of: date = date(2026, 10, 2)) -> dict[str, object]:
     signals = analyse(sample(), as_of)
     return {
         "signals": [asdict(item) for item in signals],
+        "manager_portfolio": manager_portfolio(sample(), as_of),
         "summary": portfolio_summary(signals),
     }

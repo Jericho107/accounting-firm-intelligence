@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "accounting-firm-intelligence"
+version = "1.1.0"
+description = "Client profitability, WIP, receivables, deadline risk and capacity intelligence for accounting practices."
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.9,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "SIM", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

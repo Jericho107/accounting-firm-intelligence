@@ -255,10 +255,18 @@ def decision_marts(connection: sqlite3.Connection, as_of: date) -> dict[str, obj
     ).fetchall()
     capacity = connection.execute(
         """
-        SELECT c.manager, SUM(c.available_hours) available, COALESCE(SUM(t.hours), 0) worked
-        FROM fact_capacity c
-        LEFT JOIN fact_time t ON t.employee_id = c.employee_id
-        GROUP BY c.manager ORDER BY c.manager
+        WITH available AS (
+            SELECT manager, SUM(available_hours) available
+            FROM fact_capacity GROUP BY manager
+        ), worked AS (
+            SELECT c.manager, SUM(t.hours) worked
+            FROM fact_capacity c
+            LEFT JOIN fact_time t ON t.employee_id = c.employee_id
+            GROUP BY c.manager
+        )
+        SELECT a.manager, a.available, COALESCE(w.worked, 0)
+        FROM available a LEFT JOIN worked w USING(manager)
+        ORDER BY a.manager
         """
     ).fetchall()
     return {

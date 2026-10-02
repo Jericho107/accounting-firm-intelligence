@@ -2,10 +2,10 @@
 
 | Claim | Executable evidence | Failure evidence | Status |
 |---|---|---|---|
-| Engagement grain is governed | `validate` + tests | duplicate client/service row | implemented |
-| Deadline and collection risks are deterministic | `analyse` + tests | boundary cases | implemented |
-| Material defects fail closed | validator + CLI | reverse-test corruption | implemented |
-| Clean checkout is executable | CI install/test/smoke | non-zero CI | implemented |
+| Inputs respect contract | unit tests + smoke run | corrupt input | implemented |
+| Decision metric is deterministic | core functions | boundary tests | implemented |
+| Material defect is detected | validator | reverse test | implemented |
+| Repository works from clean checkout | CI install + smoke | CI fails closed | implemented |
 | Real-world business impact | none in synthetic case | N/A | **not claimed** |
 
 ## Officialisation rule

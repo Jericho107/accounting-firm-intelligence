@@ -16,6 +16,8 @@
 
 **All data and entities are synthetic. No client result or realised ROI is claimed.**
 
+---
+
 ## What this repository proves
 
 - Engagement contribution and margin
@@ -24,7 +26,7 @@
 - Accounts-receivable ageing
 - Filing deadline risk
 
-The repository has an executable happy path and deliberately corrupted states that must be rejected.
+The objective is not to inflate a portfolio with screenshots. The repository has an executable happy path and deliberately corrupted states that must be rejected.
 
 ## Evidence chain
 
@@ -42,8 +44,31 @@ python -m accounting_intel.cli smoke
 python -m accounting_intel.cli reverse-test
 ```
 
+## Repository map
+
+```text
+accounting-firm-intelligence/
+├── .github/workflows/ci.yml
+├── config/
+├── docs/
+├── sql/
+├── src/accounting_intel/
+├── tests/
+├── Dockerfile
+├── Makefile
+├── pyproject.toml
+└── README.md
+```
+
 ## Proof boundary
 
-Implemented evidence is separated from future production claims. Thresholds in this synthetic case are examples and must be calibrated before real deployment.
+Implemented evidence is separated from future production claims. See `docs/proof_matrix.md` and `docs/limitations.md`. Thresholds in this synthetic case are examples to demonstrate governance and must be calibrated before real deployment.
 
-**Pretoria BI — Understand · Decide · Act · Measure**
+---
+
+<div align="center">
+
+**Pretoria BI**  
+**Understand · Decide · Act · Measure**
+
+</div>

@@ -1,0 +1,6 @@
+{
+  "project": "accounting-firm-intelligence",
+  "mode": "fail_closed",
+  "synthetic": true,
+  "brand": "Pretoria BI"
+}

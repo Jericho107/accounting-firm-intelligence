@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 from datetime import date
 from pathlib import Path
 
-from .core import analyse
+from .core import analyse, sample
 
 
 @dataclass(frozen=True)
@@ -160,20 +160,20 @@ def build_warehouse(data: PracticeData, path: str | Path = ":memory:") -> sqlite
     connection.executemany(
         "INSERT INTO fact_time VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
-            (r.entry_id, r.client_id, r.service_line, r.employee_id, r.work_date.isoformat(), r.hours, r.hours * r.cost_rate)
+            (\n                r.entry_id, r.client_id, r.service_line, r.employee_id,\n                r.work_date.isoformat(), r.hours, r.hours * r.cost_rate,\n            )
             for r in data.time_entries
         ],
     )
     connection.executemany(
         "INSERT INTO fact_invoice VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
-            (r.invoice_id, r.client_id, r.service_line, r.invoice_date.isoformat(), r.due_date.isoformat(), r.amount, r.paid_amount)
+            (\n                r.invoice_id, r.client_id, r.service_line, r.invoice_date.isoformat(),\n                r.due_date.isoformat(), r.amount, r.paid_amount,\n            )
             for r in data.invoices
         ],
     )
     connection.executemany(
         "INSERT INTO fact_obligation VALUES (?, ?, ?, ?, ?)",
-        [(r.obligation_id, r.client_id, r.service_line, r.due_date.isoformat(), r.completion_pct) for r in data.obligations],
+        [\n            (r.obligation_id, r.client_id, r.service_line, r.due_date.isoformat(), r.completion_pct)\n            for r in data.obligations\n        ],
     )
     connection.executemany(
         "INSERT INTO fact_capacity VALUES (?, ?, ?)",
@@ -202,7 +202,7 @@ def reconciliation(connection: sqlite3.Connection, data: PracticeData) -> dict[s
         "obligations": connection.execute("SELECT COUNT(*) FROM fact_obligation").fetchone()[0],
         "capacity": connection.execute("SELECT COUNT(*) FROM fact_capacity").fetchone()[0],
         "hours": round(connection.execute("SELECT COALESCE(SUM(hours), 0) FROM fact_time").fetchone()[0], 2),
-        "labour_cost": round(connection.execute("SELECT COALESCE(SUM(labour_cost), 0) FROM fact_time").fetchone()[0], 2),
+        "labour_cost": round(\n            connection.execute("SELECT COALESCE(SUM(labour_cost), 0) FROM fact_time").fetchone()[0], 2\n        ),
         "billed": round(connection.execute("SELECT COALESCE(SUM(amount), 0) FROM fact_invoice").fetchone()[0], 2),
         "paid": round(connection.execute("SELECT COALESCE(SUM(paid_amount), 0) FROM fact_invoice").fetchone()[0], 2),
     }
@@ -293,5 +293,5 @@ def evidence_pack(as_of: date = date(2026, 10, 2)) -> dict[str, object]:
         },
         "reconciliation": recon,
         "marts": marts,
-        "legacy_signal_check": [asdict(row) for row in analyse(__import__("accounting_intel.core", fromlist=["sample"]).sample(), as_of)],
+        "legacy_signal_check": [asdict(row) for row in analyse(sample(), as_of)],
     }

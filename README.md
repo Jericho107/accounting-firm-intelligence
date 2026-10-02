@@ -18,7 +18,7 @@
 
 ---
 
-## What this repository proves
+## Implemented capabilities
 
 - Engagement contribution and margin
 - Effective billing rate
@@ -26,9 +26,9 @@
 - Accounts-receivable ageing
 - Filing deadline risk
 
-The objective is not to inflate a portfolio with screenshots. The repository has an executable happy path and deliberately corrupted states that must be rejected.
+The implementation is executable end to end and includes controlled failure cases to verify that material data defects are rejected.
 
-## Evidence chain
+## Decision and control flow
 
 ```text
 SIGNAL → CONTRACT → VALIDATION → ANALYSIS → DECISION RULE → ACTION OWNER → FOLLOW-UP
@@ -60,7 +60,7 @@ accounting-firm-intelligence/
 └── README.md
 ```
 
-## Proof boundary
+## Scope and limitations
 
 Implemented evidence is separated from future production claims. See `docs/proof_matrix.md` and `docs/limitations.md`. Thresholds in this synthetic case are examples to demonstrate governance and must be calibrated before real deployment.
 

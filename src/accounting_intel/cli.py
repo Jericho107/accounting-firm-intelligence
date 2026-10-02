@@ -4,7 +4,7 @@ import json
 import sys
 from datetime import date
 
-from .core import Engagement, serialise_sample, sample, validate
+from .core import Engagement, sample, serialise_sample, validate
 
 
 def smoke() -> int:

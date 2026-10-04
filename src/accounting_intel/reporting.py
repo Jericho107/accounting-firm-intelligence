@@ -65,7 +65,18 @@ small {{ color: #555; }}
 <h2>Client profitability</h2>
 {_table(
     ["Client", "Manager", "Service", "Fees", "Hours", "Labour cost", "Contribution"],
-    [[r["client_id"], r["manager"], r["service_line"], r["fees"], r["hours"], r["labour_cost"], r["contribution"]] for r in profitability],
+    [
+        [
+            r["client_id"],
+            r["manager"],
+            r["service_line"],
+            r["fees"],
+            r["hours"],
+            r["labour_cost"],
+            r["contribution"],
+        ]
+        for r in profitability
+    ],
 )}
 
 <h2>Receivables</h2>

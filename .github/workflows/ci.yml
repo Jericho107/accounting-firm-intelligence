@@ -32,5 +32,9 @@ jobs:
         run: pytest -q
       - name: Smoke evidence
         run: python -m accounting_intel.cli smoke
+      - name: Generate executive decision surface
+        run: |
+          python -m accounting_intel.cli report
+          test -s output/accounting_executive_report.html
       - name: Reverse-test evidence
         run: python -m accounting_intel.cli reverse-test
